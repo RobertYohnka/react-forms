@@ -2,24 +2,36 @@ import { useState } from "react"
 
 
 
-export default function SignUpForm() {
-    const [username, SetUsername] = useState("");
-    const [password, SetPassword] = useState("");
-    const [error, SetError] = useState("");
+export default function SignUpForm({token, setToken}) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     
     async function handleSubmit(event) {
         event.preventDefault();
         // console.log("Hello 👋");
         try {
-            const response = await fetch('https://fsa-jwt-practice.herokuapp.com/signup')
+            const response = await fetch('https://fsa-jwt-practice.herokuapp.com/signup', 
+            { 
+              method: "POST", 
+              headers: { 
+                "Content-Type": "application/json" 
+              }, 
+              body: JSON.stringify({ 
+                username: username, 
+                password: password, 
+              }) 
+            })
+        
             const result = await response.json();
+            setToken(result.token);
             console.log(result);
         } catch (error) {
             setError(error.message);
         }
     }
     return (
-    <div>
+    <div className="card"> 
         <h2>Sign Up</h2>
         {error && <p> {error}</p>}
         <form onSubmit={handleSubmit}>
@@ -28,7 +40,7 @@ export default function SignUpForm() {
                 <input 
                     value={username}
                     onChange={(e) => {
-                        SetUsername(e.target.value);
+                        setUsername(e.target.value);
                     }}
                 />
             </label>
@@ -38,7 +50,7 @@ export default function SignUpForm() {
                     type="password"
                     value={password}
                     onChange={(e) => {
-                        SetPassword(e.target.value);
+                        setPassword(e.target.value);
                     }}        
                 />
             </label>
