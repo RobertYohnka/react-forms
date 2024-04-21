@@ -1,4 +1,6 @@
-import { useState } from "react"
+import React from "react";
+import { useState } from "react";
+import "./index.css";
 
 export default function Authenticate({ token }) {
     const [successMessage, setSuccessMessage] = useState(null);
